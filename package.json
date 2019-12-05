@@ -1,0 +1,43 @@
+{
+  "name": "react-micro-machine",
+  "version": "0.1.0",
+  "description": "Higher Order React Components for loading remote React Components",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jdnarvaez/react-micro-machine"
+  },
+  "keywords": [
+    "React",
+    "Remote"
+  ],
+  "author": "Juan Narvaez",
+  "scripts": {
+    "build": "npm run compile",
+    "clean:all": "rimraf package-lock.json && rimraf ./node_modules",
+    "clean:install": "npm run clean:all && npm install",
+    "compile": "npm run compile:clean && npm run compile:build",
+    "compile:clean": "rimraf ./lib",
+    "compile:build": "babel src --out-dir lib --copy-files",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "prop-types": "^15.5.8"
+  },
+  "peerDependencies": {
+    "react": "^16.3.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.0",
+    "@babel/core": "^7.1.5",
+    "@babel/plugin-syntax-object-rest-spread": "^7.0.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.1.0",
+    "@babel/plugin-transform-object-assign": "^7.0.0",
+    "@babel/preset-env": "^7.1.5",
+    "@babel/preset-react": "^7.0.0",
+    "autoprefixer": "^9.7.1",
+    "babel-jest": "^24.9.0",
+    "babel-loader": "^8.0.4",
+    "rimraf": "^3.0.0"
+  }
+}
