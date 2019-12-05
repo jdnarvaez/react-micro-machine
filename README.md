@@ -40,8 +40,14 @@ output: {
   filename: `my-component.js`,
   library: 'MyComponent',
   libraryExport: 'default',
-  libraryTarget: 'window'
+  libraryTarget: 'var'
 },
+plugins : [
+  new WrapperPlugin({
+    test: /^my-component.*js$/,
+    footer: 'export default MyComponent',
+  }),     
+]
 ```
 
 The following `props` make the assumption that the stylesheet and source routes are available and serve the appropriate assets generated from bundling the component above:
