@@ -36,6 +36,10 @@ ReactDOM.render(React.createElement(BundledRemoteComponent, props), document.get
 Use this component when you are loading a bundled file that is an ES6 Module that can be loaded via [dynamic import](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import). In this case we do not need to know what the library name is, as the library is accessible from the dynamic import statement, instead of within the global window context.
 
 ```
+const WrapperPlugin = require('wrapper-webpack-plugin')
+.
+.
+.
 output: {
   filename: `my-component.js`,
   library: 'MyComponent',
@@ -43,10 +47,16 @@ output: {
   libraryTarget: 'var'
 },
 plugins : [
+.
+.
+.
   new WrapperPlugin({
     test: /^my-component.*js$/,
     footer: 'export default MyComponent',
-  }),     
+  }),    
+  .
+  .
+  .
 ]
 ```
 
