@@ -14,11 +14,9 @@ class BundledRemoteComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {};
-    this.loadSource = this.loadSource.bind(this);
-    this.loadStylesheet = this.loadStylesheet.bind(this);
   }
 
-  loadSource() {
+  loadSource = () => {
     const component = this;
     const { server, source } = this.props;
 
@@ -51,7 +49,7 @@ class BundledRemoteComponent extends React.Component {
     }
   }
 
-  loadStylesheet() {
+  loadStylesheet = () => {
     const component = this;
     const { server, stylesheet } = this.props;
 
