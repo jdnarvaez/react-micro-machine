@@ -97,10 +97,21 @@ class BundledRemoteComponent extends React.Component {
       ...rest
     } = this.props;
 
-    if (((stylesPath && stylesheetLoaded) || !stylesPath) && sourceLoaded) {
-      const DynamicComponent = window[componentName];
-      return (<DynamicComponent {...rest} />)
+    try {
+      if (((stylesPath && stylesheetLoaded) || !stylesPath) && sourceLoaded) {
+        const DynamicComponent = window[componentName];
+        return (<DynamicComponent {...rest} />)
+      }
+    } catch(err) {
+      console.error(err);
+
+      if (errorComponent) {
+        return errorComponent;
+      } else {
+        return null;
+      }
     }
+
 
     if (error) {
       return errorComponent;

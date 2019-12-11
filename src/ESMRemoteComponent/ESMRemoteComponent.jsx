@@ -74,8 +74,18 @@ class ESMRemoteComponent extends React.Component {
       ...rest
     } = this.props;
 
-    if (((stylesheet && stylesheetLoaded) || !stylesheet) && sourceLoaded) {
-      return (<DynamicComponent {...rest} />)
+    try {
+      if (((stylesheet && stylesheetLoaded) || !stylesheet) && sourceLoaded) {
+        return (<DynamicComponent {...rest} />)
+      }
+    } catch (err) {
+      console.error(err);
+
+      if (errorComponent) {
+        return errorComponent;
+      } else {
+        return null;
+      }
     }
 
     if (error) {
