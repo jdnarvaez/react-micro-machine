@@ -7,7 +7,8 @@ const propTypes = {
   source: PropTypes.string.isRequired,
   componentName: PropTypes.string.isRequired,
   loadingComponent: PropTypes.element,
-  errorComponent: PropTypes.element
+  errorComponent: PropTypes.element,
+  unloadSourcesOnUnmount: PropTypes.bool
 };
 
 class BundledRemoteComponent extends React.Component {
@@ -24,8 +25,18 @@ class BundledRemoteComponent extends React.Component {
       const src = `${server}${source}`;
 
       for (var i = 0; i < document.scripts.length; i++) {
-        if (document.scripts[i].src === src) {
-           return this.setState({ sourceLoaded : true })
+        const scriptElement = document.scripts[i];
+
+        if (scriptElement.src === src) {
+          var refCount = scriptElement.dataset.refCount;
+
+          if (refCount === undefined) {
+            scriptElement.dataset.refCount = '1';
+          } else {
+            scriptElement.dataset.refCount = (parseInt(refCount) + 1).toString();
+          }
+
+          return this.setState({ sourceLoaded : true })
         }
       }
 
@@ -40,12 +51,34 @@ class BundledRemoteComponent extends React.Component {
       }
 
       script.src = src;
+      script.dataset.refCount = '1';
 
       this.setState({ script : script }, () => {
         document.head.appendChild(script); //or something of the likes
       })
     } else {
       this.setState({ stylesheetLoaded : true })
+    }
+  }
+
+  unloadSource = () => {
+    const { server, source } = this.props;
+
+    if (server && source) {
+      const src = `${server}${source}`;
+
+      for (var i = 0; i < document.scripts.length; i++) {
+        const scriptElement = document.scripts[i];
+
+        if (scriptElement.src === src) {
+          var refCount = parseInt(scriptElement.dataset.refCount);
+          scriptElement.dataset.refCount = (refCount - 1).toString();
+
+          if ((refCount - 1) === 0) {
+            scriptElement.remove();
+          }
+        }
+      }
     }
   }
 
@@ -57,8 +90,18 @@ class BundledRemoteComponent extends React.Component {
       const href = `${server}${stylesheet}`;
 
       for (var i = 0; i < document.styleSheets.length; i++) {
-        if (document.styleSheets[i].href === href) {
-           return this.setState({ stylesheetLoaded : true })
+        const stylesheetElement = document.styleSheets[i];
+
+        if (stylesheetElement.href === href) {
+          var refCount = stylesheetElement.ownerNode.dataset.refCount;
+
+          if (refCount === undefined) {
+            stylesheetElement.ownerNode.dataset.refCount = '1';
+          } else {
+            stylesheetElement.ownerNode.dataset.refCount = (parseInt(refCount) + 1).toString();
+          }
+
+          return this.setState({ stylesheetLoaded : true })
         }
       }
 
@@ -67,10 +110,11 @@ class BundledRemoteComponent extends React.Component {
       link.type = 'text/css';
 
       link.onload = function() {
-        component.setState({ stylesLoaded : true });
+        component.setState({ stylesheetLoaded : true });
       }
 
-      link.href =  href;
+      link.href = href;
+      link.dataset.refCount = '1';
 
       this.setState({ link : link }, () => {
         document.getElementsByTagName('HEAD')[0].appendChild(link);
@@ -80,17 +124,47 @@ class BundledRemoteComponent extends React.Component {
     }
   }
 
+  unloadStylesheet = () => {
+    const { server, stylesheet } = this.props;
+
+    if (server && stylesheet) {
+      const href = `${server}${stylesheet}`;
+
+      for (var i = 0; i < document.styleSheets.length; i++) {
+        const stylesheetElement = document.styleSheets[i];
+
+        if (stylesheetElement.href === href) {
+          var refCount = parseInt(stylesheetElement.ownerNode.dataset.refCount);
+          stylesheetElement.ownerNode.dataset.refCount = (refCount - 1).toString();
+
+          if ((refCount - 1) === 0) {
+            stylesheetElement.ownerNode.remove();
+          }
+        }
+      }
+    }
+  }
+
   componentDidMount() {
     this.loadSource();
     this.loadStylesheet();
+  }
+
+  componentWillUnmount() {
+    const { unloadSourcesOnUnmount } = this.props;
+
+    if (unloadSourcesOnUnmount) {
+      this.unloadStylesheet();
+      this.unloadSource();
+    }
   }
 
   render() {
     const { stylesheetLoaded, sourceLoaded, error } = this.state;
 
     const {
-      stylesPath,
-      sourcePath,
+      stylesheet,
+      source,
       componentName,
       loadingComponent,
       errorComponent,
@@ -98,7 +172,7 @@ class BundledRemoteComponent extends React.Component {
     } = this.props;
 
     try {
-      if (((stylesPath && stylesheetLoaded) || !stylesPath) && sourceLoaded) {
+      if (((stylesheet && stylesheetLoaded) || !stylesheet) && sourceLoaded) {
         const DynamicComponent = window[componentName];
         return (<DynamicComponent {...rest} />)
       }
