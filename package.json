@@ -1,8 +1,8 @@
 {
   "name": "react-micro-machine",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Higher Order React Components for loading remote React Components",
-  "main": "lib/index.js",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jdnarvaez/react-micro-machine"
@@ -18,8 +18,7 @@
     "clean:install": "npm run clean:all && npm install",
     "compile": "npm run compile:clean && npm run compile:build",
     "compile:clean": "rimraf ./lib",
-    "compile:build": "babel src --out-dir lib --copy-files",
-    "prepare": "npm run build"
+    "compile:build": "babel src --out-dir lib --copy-files"
   },
   "dependencies": {
     "prop-types": "^15.5.8"

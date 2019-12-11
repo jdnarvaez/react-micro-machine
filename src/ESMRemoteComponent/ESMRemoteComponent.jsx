@@ -46,8 +46,8 @@ class ESMRemoteComponent extends React.Component {
       link.type = 'text/css';
       link.href =  href;
 
-      link.onload = function() {
-        component.setState({ stylesLoaded : true });
+      link.onload = function(e) {
+        component.setState({ stylesheetLoaded : true });
       }
 
       this.setState({ link : link }, () => {
@@ -67,19 +67,23 @@ class ESMRemoteComponent extends React.Component {
     const { stylesheetLoaded, sourceLoaded, DynamicComponent, error } = this.state;
 
     const {
-      stylesPath,
-      sourcePath,
+      stylesheet,
+      source,
       loadingComponent,
       errorComponent,
       ...rest
     } = this.props;
 
-    if (((stylesPath && stylesheetLoaded) || !stylesPath) && sourceLoaded) {
+    if (((stylesheet && stylesheetLoaded) || !stylesheet) && sourceLoaded) {
       return (<DynamicComponent {...rest} />)
     }
 
     if (error) {
-      return errorComponent;
+      if (errorComponent) {
+        return errorComponent;
+      }
+
+      return null;
     }
 
     if (loadingComponent) {
