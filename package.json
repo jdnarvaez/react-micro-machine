@@ -1,8 +1,8 @@
 {
   "name": "react-micro-machine",
-  "version": "0.1.3.SNAPSHOT",
+  "version": "0.1.4-SNAPSHOT",
   "description": "Higher Order React Components for loading remote React Components",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/jdnarvaez/react-micro-machine"
@@ -13,6 +13,7 @@
   ],
   "author": "Juan Narvaez",
   "scripts": {
+    "prepare": "npm run build",
     "build": "npm run compile",
     "clean:all": "rimraf package-lock.json && rimraf ./node_modules",
     "clean:install": "npm run clean:all && npm install",
