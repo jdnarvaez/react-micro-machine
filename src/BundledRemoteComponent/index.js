@@ -1,2 +1,2 @@
-const BundledRemoteComponent = require('./BundledRemoteComponent');
-module.exports = BundledRemoteComponent;
+import BundledRemoteComponent from './BundledRemoteComponent';
+export default BundledRemoteComponent;

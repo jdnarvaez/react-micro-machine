@@ -1,7 +1,7 @@
-const BundledRemoteComponent = require('./BundledRemoteComponent').default;
-const ESMRemoteComponent = require('./ESMRemoteComponent').default;
+import BundledRemoteComponent from './BundledRemoteComponent';
+import ESMRemoteComponent from './ESMRemoteComponent';
 
-module.exports = {
+export {
   BundledRemoteComponent,
   ESMRemoteComponent
-};
+}

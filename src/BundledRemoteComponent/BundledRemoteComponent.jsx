@@ -7,7 +7,6 @@ const propTypes = {
   source: PropTypes.string.isRequired,
   componentName: PropTypes.string.isRequired,
   loadingComponent: PropTypes.element,
-  errorComponent: PropTypes.element,
   unloadSourcesOnUnmount: PropTypes.bool
 };
 
@@ -54,7 +53,7 @@ class BundledRemoteComponent extends React.Component {
       script.dataset.refCount = '1';
 
       this.setState({ script : script }, () => {
-        document.head.appendChild(script); //or something of the likes
+        document.head.appendChild(script);
       })
     } else {
       this.setState({ stylesheetLoaded : true })
@@ -167,28 +166,12 @@ class BundledRemoteComponent extends React.Component {
       source,
       componentName,
       loadingComponent,
-      errorComponent,
       ...rest
     } = this.props;
 
-    try {
-      if (((stylesheet && stylesheetLoaded) || !stylesheet) && sourceLoaded) {
-        const DynamicComponent = window[componentName];
-        return (<DynamicComponent {...rest} />)
-      }
-    } catch(err) {
-      console.error(err);
-
-      if (errorComponent) {
-        return errorComponent;
-      } else {
-        return null;
-      }
-    }
-
-
-    if (error) {
-      return errorComponent;
+    if (((stylesheet && stylesheetLoaded) || !stylesheet) && sourceLoaded) {
+      const DynamicComponent = window[componentName];
+      return (<DynamicComponent {...rest} />)
     }
 
     if (loadingComponent) {

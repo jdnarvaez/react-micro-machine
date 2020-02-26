@@ -1,2 +1,2 @@
-const ESMRemoteComponent = require('./ESMRemoteComponent');
-module.exports = ESMRemoteComponent;
+import ESMRemoteComponent from './ESMRemoteComponent';
+export default ESMRemoteComponent;

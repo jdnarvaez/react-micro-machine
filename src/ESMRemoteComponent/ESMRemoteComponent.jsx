@@ -6,7 +6,6 @@ const propTypes = {
   stylesheet: PropTypes.string,
   source: PropTypes.string.isRequired,
   loadingComponent: PropTypes.element,
-  errorComponent: PropTypes.element,
   unloadSourcesOnUnmount: PropTypes.bool
 };
 
@@ -17,14 +16,19 @@ class ESMRemoteComponent extends React.Component {
   }
 
   loadSource = () => {
-    const component = this;
     const { server, source } = this.props;
 
     if (server && source) {
       const url = `${server}${source}`;
 
+      console.log(`loading ${url}`)
+
       import(/* webpackIgnore: true */ url).then((module) => {
-        this.setState({ sourceLoaded : true, DynamicComponent : module.default });
+        try {
+          this.setState({ sourceLoaded : true, DynamicComponent : module.default });
+        } catch (error) {
+          this.setState({ error : error })
+        }
       }).catch(err => this.setState({ error : err }))
     }
   }
@@ -108,45 +112,26 @@ class ESMRemoteComponent extends React.Component {
   render() {
     const { stylesheetLoaded, sourceLoaded, DynamicComponent, error } = this.state;
 
+    if (error) {
+      throw error;
+    }
+
     const {
       stylesheet,
       loadingComponent,
-      errorComponent,
       ...rest
     } = this.props;
 
-    try {
-      if (((stylesheet && stylesheetLoaded) || !stylesheet) && sourceLoaded) {
-        return (<DynamicComponent {...rest} />)
-      }
-    } catch (err) {
-      console.error(err);
-
-      if (errorComponent) {
-        return errorComponent;
-      } else {
-        return null;
-      }
+    if (((stylesheet && stylesheetLoaded) || !stylesheet) && sourceLoaded) {
+      return (<DynamicComponent {...rest} />)
     }
-
-    if (error) {
-      if (errorComponent) {
-        return errorComponent;
-      }
-
-      return null;
-    }
-
-    console.log('Displaying loading component');
 
     if (loadingComponent) {
       return loadingComponent;
     }
-
-    return null;
   }
 }
 
-ESMRemoteComponent.propTYpes = propTypes;
+ESMRemoteComponent.propTypes = propTypes;
 
 export default ESMRemoteComponent;

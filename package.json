@@ -1,6 +1,6 @@
 {
   "name": "react-micro-machine",
-  "version": "0.1.4-SNAPSHOT",
+  "version": "0.1.4",
   "description": "Higher Order React Components for loading remote React Components",
   "main": "lib/index.js",
   "repository": {
@@ -31,14 +31,14 @@
     "@babel/cli": "^7.7.0",
     "@babel/core": "^7.1.5",
     "@babel/plugin-proposal-class-properties": "^7.7.4",
+    "@babel/plugin-proposal-dynamic-import": "^7.8.3",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-syntax-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-modules-commonjs": "^7.1.0",
     "@babel/plugin-transform-object-assign": "^7.0.0",
+    "@babel/plugin-transform-runtime": "^7.8.3",
     "@babel/preset-env": "^7.1.5",
     "@babel/preset-react": "^7.0.0",
-    "autoprefixer": "^9.7.1",
-    "babel-jest": "^24.9.0",
-    "babel-loader": "^8.0.4",
     "rimraf": "^3.0.0"
   }
 }
