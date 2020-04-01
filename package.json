@@ -1,6 +1,6 @@
 {
   "name": "react-micro-machine",
-  "version": "0.1.5-SNAPSHOT",
+  "version": "0.1.5",
   "description": "Higher Order React Components for loading remote React Components",
   "main": "lib/index.js",
   "repository": {

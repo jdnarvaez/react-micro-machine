@@ -158,8 +158,14 @@ class BundledRemoteComponent extends React.Component {
     }
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (!prevState.error && this.state.error) {
+      throw this.state.error;
+    }
+  }
+
   render() {
-    const { stylesheetLoaded, sourceLoaded, error } = this.state;
+    const { stylesheetLoaded, sourceLoaded } = this.state;
 
     const {
       stylesheet,
